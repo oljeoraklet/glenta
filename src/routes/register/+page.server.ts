@@ -1,10 +1,11 @@
 import { lucia } from "$lib/server/lucia";
 import { fail, redirect } from "@sveltejs/kit";
 import { generateId } from "lucia";
-import { db } from "$lib/server/db";
+import { prisma } from "$lib/server/prisma";
+
 
 import type { Actions } from './$types';
-import { userTable } from "$lib/server/db/schema/user";
+
 
 export const actions: Actions = {
 	default: async (event) => {
@@ -33,11 +34,20 @@ export const actions: Actions = {
 		const hashedPassword = await Bun.password.hash(password);
 
 		// TODO: check if username is already used
-		await db.insert(userTable).values({
-			id: userId,
-			username: username,
-			hashed_password: hashedPassword
-		});
+		// await db.insert(userTable).values({
+		// 	id: userId,
+		// 	username: username,
+		// 	hashed_password: hashedPassword
+		// });
+
+		await prisma.user.create({
+			data: {
+				id: userId,
+				userName: username,
+				hashedPassword: hashedPassword
+			}
+		})
+
 
 		const session = await lucia.createSession(userId, {});
 		const sessionCookie = lucia.createSessionCookie(session.id);
