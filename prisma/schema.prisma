@@ -11,15 +11,61 @@ datasource db {
 }
 
 model User {
-  id             String    @id
-  userName       String    @unique
+  id             String        @id @unique
+  userName       String        @unique
   hashedPassword String
+  role           String        @default("User") // Role like 'Admin', 'User'
   sessions       Session[]
+  hostedEvents   EventHost[] // Relation to EventHost for events the user is hosting
+  events         Participant[] // Relation to Participant for events the user is participating in
+  followers      UserFollow[]  @relation("follower")
+  following      UserFollow[]  @relation("following")
 }
 
 model Session {
-  id        String   @id
+  id        String   @id @unique
   userId    String
   expiresAt DateTime
   user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
+model Event {
+  id           Int           @id @default(autoincrement())
+  name         String
+  description  String
+  date         DateTime
+  location     String
+  urlToken     String        @unique
+  hosts        EventHost[] // Relation to EventHost for users hosting the event
+  participants Participant[] // Relation to Participant for users participating in the event
+}
+
+model EventHost {
+  event   Event  @relation(fields: [eventId], references: [id])
+  user    User   @relation(fields: [userId], references: [id])
+  status  String // Status like 'Pending', 'Accepted', 'Declined'
+  eventId Int
+  userId  String
+
+  @@id([eventId, userId]) // Composite primary key
+}
+
+model Participant {
+  id      Int    @id @default(autoincrement())
+  event   Event  @relation(fields: [eventId], references: [id])
+  user    User   @relation(fields: [userId], references: [id])
+  status  String // Status like 'Invited', 'Accepted', 'Declined'
+  eventId Int
+  userId  String
+}
+
+model UserFollow {
+  followerId  String
+  followingId String
+  followDate  DateTime? // Optional
+
+  follower  User @relation("follower", fields: [followerId], references: [id])
+  following User @relation("following", fields: [followingId], references: [id])
+
+  @@id([followerId, followingId]) // Composite primary key
 }

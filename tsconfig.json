@@ -12,6 +12,10 @@
 		"strict": true,
 		"module": "esnext",
 		"moduleResolution": "bundler",
+		"paths": {
+			"$lib": ["./src/lib"],
+			"$lib/*": ["./src/lib/*"]
+    	}
 		// "types": ["bun-types"]
 	}
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
