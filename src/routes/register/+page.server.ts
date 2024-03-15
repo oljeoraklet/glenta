@@ -2,49 +2,35 @@ import { lucia } from "$lib/server/lucia";
 import { fail, redirect } from "@sveltejs/kit";
 import { generateId } from "lucia";
 import { prisma } from "$lib/server/prisma";
-
-
 import type { Actions } from './$types';
+import { superValidate } from "sveltekit-superforms";
+import { registerSchema } from "$lib/zod/schema";
+import { zod } from "sveltekit-superforms/adapters";
+import type { PageServerLoad } from "../$types";
+
+export const load: PageServerLoad = async (event) => {
+	return { form: await superValidate(event, zod(registerSchema)) };
+}
 
 
 export const actions: Actions = {
 	default: async (event) => {
-		const formData = await event.request.formData();
-		const username = formData.get("username");
-		const password = formData.get("password");
-		// username must be between 4 ~ 31 characters, and only consists of lowercase letters, 0-9, -, and _
-		// keep in mind some database (e.g. mysql) are case insensitive
-		if (
-			typeof username !== "string" ||
-			username.length < 3 ||
-			username.length > 31 ||
-			!/^[a-z0-9_-]+$/.test(username)
-		) {
+		const form = await superValidate(event, zod(registerSchema));
+		if (!form.valid) {
 			return fail(400, {
-				message: "Invalid username"
+				form,
 			});
 		}
-		if (typeof password !== "string" || password.length < 6 || password.length > 255) {
-			return fail(400, {
-				message: "Invalid password"
-			});
-		}
+		const { email, password } = form.data;
 
 		const userId = generateId(15);
 		const hashedPassword = await Bun.password.hash(password);
 
-		// TODO: check if username is already used
-		// await db.insert(userTable).values({
-		// 	id: userId,
-		// 	username: username,
-		// 	hashed_password: hashedPassword
-		// });
-
 		await prisma.user.create({
 			data: {
 				id: userId,
-				userName: username,
-				hashedPassword: hashedPassword
+				email,
+				hashedPassword,
 			}
 		})
 

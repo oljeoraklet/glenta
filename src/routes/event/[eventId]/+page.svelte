@@ -1,7 +1,8 @@
 <script lang="ts">
-	import RegisterForm from './register-form.svelte';
 	import type { PageData } from './$types';
+
 	export let data: PageData;
 </script>
 
-<RegisterForm data={data.form} />
+<h1>{data.title}</h1>
+<div>{@html data.content}</div>

@@ -6,20 +6,30 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id             String        @id @unique
-  userName       String        @unique
-  hashedPassword String
-  role           String        @default("User") // Role like 'Admin', 'User'
-  sessions       Session[]
-  hostedEvents   EventHost[] // Relation to EventHost for events the user is hosting
-  events         Participant[] // Relation to Participant for events the user is participating in
-  followers      UserFollow[]  @relation("follower")
-  following      UserFollow[]  @relation("following")
+  id                     String                   @id @unique
+  userName               String?                  @unique
+  hashedPassword         String
+  email                  String                   @unique
+  role                   String                   @default("User") // Role like 'Admin', 'User'
+  sessions               Session[]
+  hostedEvents           EventHost[] // Relation to EventHost for events the user is hosting
+  events                 Participant[] // Relation to Participant for events the user is participating in
+  followers              UserFollow[]             @relation("follower")
+  following              UserFollow[]             @relation("following")
+  EmailVerificationCodes EmailVerificationCodes[]
+}
+
+model EmailVerificationCodes {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  code      String
+  expiresAt DateTime
+  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
 model Session {

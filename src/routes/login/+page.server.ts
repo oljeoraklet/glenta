@@ -1,8 +1,15 @@
 import { lucia } from "$lib/server/lucia";
 import { fail, redirect } from "@sveltejs/kit";
 
+import { superValidate } from "sveltekit-superforms/server"
+
 import type { Actions } from "./$types";
 import { prisma } from "$lib/server/prisma";
+
+export const load = async () => {
+	// const form = superValidate()
+	return {}
+}
 
 export const actions: Actions = {
 	default: async (event) => {
