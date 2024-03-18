@@ -21,7 +21,7 @@ export const actions: Actions = {
 				form,
 			});
 		}
-		const { email, password } = form.data;
+		const {userName, email, password,} = form.data;
 
 		const userId = generateId(15);
 		const hashedPassword = await Bun.password.hash(password);
@@ -30,6 +30,7 @@ export const actions: Actions = {
 			data: {
 				id: userId,
 				email,
+				userName,
 				hashedPassword,
 			}
 		})
@@ -41,7 +42,6 @@ export const actions: Actions = {
 			path: ".",
 			...sessionCookie.attributes
 		});
-
 		redirect(302, "/");
 	}
 };

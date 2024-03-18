@@ -8,7 +8,7 @@
 
 <div>
 	<h1>Page</h1>
-	<p>Hello <span>{data.user.username}</span></p>
+	<p>Hello <span>{data.user.userName}</span></p>
 </div>
 <DatePicker />
 <Button>Click Me</Button>

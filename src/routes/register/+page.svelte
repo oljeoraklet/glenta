@@ -4,4 +4,6 @@
 	export let data: PageData;
 </script>
 
-<RegisterForm data={data.form} />
+<section>
+	<RegisterForm data={data.form} />
+</section>
