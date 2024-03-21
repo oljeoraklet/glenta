@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { superForm, type Infer, type SuperValidated, type SuperForm } from 'sveltekit-superforms';
+	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { loginSchema, type LoginSchema } from '$lib/zod/schema';

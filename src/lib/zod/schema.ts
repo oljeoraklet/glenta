@@ -8,7 +8,6 @@ export const registerSchema = z.object({
 });
 
 export const loginSchema = z.object({
-    //User can login with either username or email
     usernameOrEmail: z.string().min(3).max(31),
     password: z.string().min(6),
 });
