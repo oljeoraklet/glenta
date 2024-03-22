@@ -12,6 +12,15 @@ export const loginSchema = z.object({
     password: z.string().min(6),
 });
 
+export const eventSchema = z.object({
+    title: z.string().min(3).max(255),
+    description: z.string().min(3).max(255),
+    date: z.date(),
+    location: z.string().min(3).max(255),
+});
+
 export type LoginSchema = typeof loginSchema;
 
 export type RegisterSchema = typeof registerSchema;
+
+export type EventSchema = typeof eventSchema;

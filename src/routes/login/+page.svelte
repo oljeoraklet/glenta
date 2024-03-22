@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import LoginForm from './login-form.svelte';
+	import LoginForm from '../../lib/components/custom/[login]/login-form.svelte';
 	export let data;
 </script>
 

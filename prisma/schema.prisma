@@ -15,7 +15,7 @@ model User {
   userName               String?                  @unique
   hashedPassword         String
   email                  String                   @unique
-  role                   String                   @default("User") // Role like 'Admin', 'User'
+  role                   Role                     @default(User) // Role like 'Admin', 'User'
   sessions               Session[]
   hostedEvents           EventHost[] // Relation to EventHost for events the user is hosting
   events                 Participant[] // Relation to Participant for events the user is participating in
@@ -48,12 +48,13 @@ model Event {
   urlToken     String        @unique
   hosts        EventHost[] // Relation to EventHost for users hosting the event
   participants Participant[] // Relation to Participant for users participating in the event
+  published    Boolean       @default(false)
 }
 
 model EventHost {
-  event   Event  @relation(fields: [eventId], references: [id])
-  user    User   @relation(fields: [userId], references: [id])
-  status  String // Status like 'Pending', 'Accepted', 'Declined'
+  event   Event      @relation(fields: [eventId], references: [id])
+  user    User       @relation(fields: [userId], references: [id])
+  status  HostStatus // Status like 'Pending', 'Accepted', 'Declined'
   eventId Int
   userId  String
 
@@ -61,10 +62,10 @@ model EventHost {
 }
 
 model Participant {
-  id      Int    @id @default(autoincrement())
-  event   Event  @relation(fields: [eventId], references: [id])
-  user    User   @relation(fields: [userId], references: [id])
-  status  String // Status like 'Invited', 'Accepted', 'Declined'
+  id      Int                 @id @default(autoincrement())
+  event   Event               @relation(fields: [eventId], references: [id])
+  user    User                @relation(fields: [userId], references: [id])
+  status  ParticipationStatus @default(Invited) // Status like 'Invited', 'Accepted', 'Declined'
   eventId Int
   userId  String
 }
@@ -78,4 +79,22 @@ model UserFollow {
   following User @relation("following", fields: [followingId], references: [id])
 
   @@id([followerId, followingId]) // Composite primary key
+}
+
+enum Role {
+  Admin
+  User
+  Company
+}
+
+enum ParticipationStatus {
+  Accepted
+  Declined
+  Invited
+}
+
+enum HostStatus {
+  Accepted
+  Declined
+  Pending
 }
