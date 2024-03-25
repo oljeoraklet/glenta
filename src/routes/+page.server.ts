@@ -5,6 +5,7 @@ import type { Actions, PageServerLoad } from "./$types";
 
 
 export const load: PageServerLoad = async (event) => {
+	console.log("Howdy main page")
 	if (!event.locals.user) {
 		return redirect(302, "/login");
 	}
@@ -16,6 +17,7 @@ export const load: PageServerLoad = async (event) => {
 export const actions: Actions = {
 	default: async (event) => {
 		if (!event.locals.session) {
+			console.log("Howdy no session")
 			return fail(401);
 		}
 		await lucia.invalidateSession(event.locals.session.id);

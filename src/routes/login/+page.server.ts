@@ -7,6 +7,7 @@ import { loginSchema } from "$lib/zod/schema";
 import { zod } from "sveltekit-superforms/adapters";
 
 export const load = async (event) => {
+	console.log("Howdy login")
 	return { form: await superValidate(event, zod(loginSchema)) };
 }
 
