@@ -20,6 +20,7 @@ export const actions: Actions = {
 				form,
 			});
 		}
+		console.log("Form Data", form.data)
 		const {usernameOrEmail, password,} = form.data;
 		
 

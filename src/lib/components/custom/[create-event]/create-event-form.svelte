@@ -13,8 +13,6 @@
 		validators: zodClient(eventSchema)
 	});
 	const { form: formData, enhance } = form;
-
-	$: console.log($formData.date);
 </script>
 
 <form method="POST" use:enhance>
