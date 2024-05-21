@@ -15,11 +15,8 @@ export const load = async (event) => {
 
 export const actions: Actions = {
     default: async (event) => {
-        console.log("Howdy event");
-            console.log("Howdy try 2 supervalidate");
             const form = await superValidate(event, zod(eventSchema));
-            console.log("Form", form);
-
+            
             if (!form.valid) {
                 console.log("Not valid", form);
                 return fail(400, { form });
@@ -45,9 +42,6 @@ export const actions: Actions = {
                 return fail(500, {form});
             }
 
-            // Your logic to handle the form data...
-            
-            // Perform the redirect if form is valid
             return redirect(302, "/event" + createdEvent.urlToken);
     }
 };

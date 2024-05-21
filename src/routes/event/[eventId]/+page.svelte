@@ -2,7 +2,7 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
+	console.log(data);
 </script>
 
-<h1>{data.title}</h1>
-<div>{@html data.content}</div>
+<div>{data}</div>
